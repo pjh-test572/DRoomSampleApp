@@ -29,12 +29,27 @@ import java.util.concurrent.TimeUnit
 
 class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnGitUserViewListener<ArrayList<UserModel>>, ViewPager.OnPageChangeListener {
 
+
+    // -------- LOCAL VALUE --------
+
     private lateinit var mViewModel: GitUserSearchViewModel
+
+    // -----------------------------
+
+    ////////////////////////////////////////////////
+    // ABSTRACT
+    ////////////////////////////////////////////////
 
     override val baseTag: String = this@GitUserSearchFragment::class.java.simpleName
     override val layoutId: Int = R.layout.fragment_gitusersearch
     lateinit var db : Db
 
+    ////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////
+    // OVERRIDE
+    ////////////////////////////////////////////////
 
     override fun init() {
         db = Db.getInstance(this.requireContext())!!
@@ -103,6 +118,7 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
         mViewModel.isLoading = false
         if((mBinding.recyclerview.adapter as GitUserSearchAdapter).itemCount > 0) mViewModel.emptyViewVisible.set(false)
         else mViewModel.emptyViewVisible.set(true)
+        mLoadingIndicatorUtil.dismiss()
     }
 
     override fun onClick(type: Int, position : Int, value: Any?) {
@@ -161,8 +177,12 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
         }
     }
 
+
+    ////////////////////////////////////////////////
+
     private fun setSearch(txt : String){
         if(!TextUtils.isEmpty(txt)){
+            mLoadingIndicatorUtil.show()
             mViewModel.isLoading = true
             if(mBinding.recyclerview.adapter != null){
                 (mBinding.recyclerview.adapter as GitUserSearchAdapter).mList.clear()

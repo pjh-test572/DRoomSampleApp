@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class GitUserFavoriteViewModel : BaseObservableViewModel()  {
+
     private val repository = GitUserFavoriteRepository()
 
     lateinit var mDisposable : CompositeDisposable

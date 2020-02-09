@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sample.pjh.gitusersearch.common.BaseApplication
+import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import io.reactivex.disposables.CompositeDisposable
 
 
@@ -25,6 +26,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment() {
     lateinit var mContainer: ViewGroup
     lateinit var viewModelFactory : ViewModelProvider.Factory
     lateinit var mDisposable : CompositeDisposable
+    lateinit var mLoadingIndicatorUtil : LoadingIndicatorUtil
 
 
     ////////////////////////////////////////////////

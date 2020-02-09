@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.sample.pjh.gitusersearch.R
+import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.view.fragment.GitUserFavoriteFragment
 import com.sample.pjh.gitusersearch.view.fragment.GitUserSearchFragment
 
@@ -16,10 +17,17 @@ import com.sample.pjh.gitusersearch.view.fragment.GitUserSearchFragment
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), ViewPager.OnPageChangeListener{
     lateinit var gitUserFavFrag : GitUserFavoriteFragment
     lateinit var gitUserSearchFrag : GitUserSearchFragment
+    lateinit var mLoadingIndicatorUtil : LoadingIndicatorUtil
 
     override fun getItem(position: Int): Fragment = when(position){
-        0 -> GitUserSearchFragment.newInstance().apply { gitUserSearchFrag = this }
-        else -> GitUserFavoriteFragment.newInstance().apply { gitUserFavFrag = this }
+        0 -> GitUserSearchFragment.newInstance().apply {
+            gitUserSearchFrag = this
+            this@apply.mLoadingIndicatorUtil =  this@SectionsPagerAdapter.mLoadingIndicatorUtil
+        }
+        else -> GitUserFavoriteFragment.newInstance().apply {
+            gitUserFavFrag = this
+            this@apply.mLoadingIndicatorUtil =  this@SectionsPagerAdapter.mLoadingIndicatorUtil
+        }
     }
 
     override fun getPageTitle(position: Int): CharSequence = when(position){
