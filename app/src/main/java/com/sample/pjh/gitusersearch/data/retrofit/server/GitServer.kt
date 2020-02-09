@@ -1,6 +1,7 @@
 package com.sample.pjh.gitusersearch.data.retrofit.server
 
 import com.sample.pjh.gitusersearch.common.type.ServerType
+import com.sample.pjh.gitusersearch.data.model.RepoModel
 import com.sample.pjh.gitusersearch.data.model.SearchUserModel
 import com.sample.pjh.gitusersearch.data.model.UserModel
 import com.sample.pjh.gitusersearch.data.retrofit.ServerResponseCallback
@@ -41,6 +42,20 @@ class GitServer {
                     listener.completeTask()
                 }
             )
+
+
+        fun getUserRepos(user : String, listener : ServerResponseCallback<ArrayList<RepoModel>>) : Disposable =
+            RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserRepos(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ listener.nextTask(it as ArrayList<RepoModel>) },
+                    { e ->
+                        if(e is HttpException) listener.failedTask(e, e.code())
+                        else listener.failedTask(e, -1)
+                    }, {
+                        listener.completeTask()
+                    }
+                )
 
 
     }

@@ -1,6 +1,7 @@
 package com.sample.pjh.gitusersearch.data.retrofit.service
 
 import com.sample.pjh.gitusersearch.common.Info
+import com.sample.pjh.gitusersearch.data.model.RepoModel
 import com.sample.pjh.gitusersearch.data.model.SearchUserModel
 import com.sample.pjh.gitusersearch.data.model.UserModel
 import io.reactivex.Observable
@@ -17,5 +18,8 @@ interface GitService {
     @GET("/users/{user}")
     fun getUserInfo(@Path("user") user: String): Observable<UserModel>
 
+
+    @GET("/users/{user}/repos")
+    fun getUserRepos(@Path("user") user: String): Observable<ArrayList<RepoModel>>
 
 }

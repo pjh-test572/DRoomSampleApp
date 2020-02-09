@@ -1,16 +1,27 @@
 package com.sample.pjh.gitusersearch.view.fragment
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
 import com.sample.pjh.gitusersearch.R
+import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.common.listener.OnGitUserViewListener
+import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.common.util.CustomIntent
+import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.model.UserModel
 import com.sample.pjh.gitusersearch.data.viewmodel.GitUserFavoriteViewModel
 import com.sample.pjh.gitusersearch.databinding.FragmentGituserfavoriteBinding
+import com.sample.pjh.gitusersearch.view.activity.MainActivity
+import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
 import com.sample.pjh.gitusersearch.view.adapter.GitUserSearchAdapter
 import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
+import com.sample.pjh.gitusersearch.view.fragment.base.MyFragmentNavigator
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +36,7 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
 
 
     override fun init() {
+        mLoadingIndicatorUtil = LoadingIndicatorUtil(requireContext())
         db = Db.getInstance(this.requireContext())!!
         mDisposable = CompositeDisposable()
         mViewModel = ViewModelProvider(this, viewModelFactory).get(GitUserFavoriteViewModel::class.java).apply {
@@ -39,6 +51,7 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
 
     override fun onPageSelected(position: Int) {
+        if(CustomLog.flag)CustomLog.L("onPageSelected","position",position)
         if(mBinding.recyclerview.adapter != null){
             (mBinding.recyclerview.adapter as GitUserSearchAdapter).mList.clear()
             (mBinding.recyclerview.adapter as GitUserSearchAdapter).notifyDataSetChanged()
@@ -80,7 +93,40 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
                 }
                 (mBinding.recyclerview.adapter as GitUserSearchAdapter).notifyItemChanged(position)
             }
+            R.id.constraintLayout->{
+                var user = value as UserModel
+                if(CustomLog.flag) CustomLog.L("constraintLayout","user.login",user.login)
+                /*var action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
+                Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment).navigate(action)*/
+                var bundle = Bundle()
+                bundle.putString("user.login",user.login)
+                findNavController().navigate(R.id.action_mainFragment_to_userInfoFragment, bundle)
+                /*val navController = (requireContext() as MainActivity).findNavController(R.id.nav_host_fragment)
+                val navHostFragment = (requireContext() as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
+                val navigator = MyFragmentNavigator((requireContext() as MainActivity), navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+                navigator.navigate()*/
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onResume")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onDestroy")
     }
 
     companion object {

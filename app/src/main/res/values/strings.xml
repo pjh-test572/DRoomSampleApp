@@ -21,7 +21,7 @@
     <string name="label_text">Name : %s</string>
     <string name="score_text">Score : %.3f</string>
     <string name="url_text">Url : %s</string>
-    <string name="count">%d</string>
+    <string name="count">%,3d</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"

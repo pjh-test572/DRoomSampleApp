@@ -4,13 +4,17 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.Info
+import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.common.listener.OnGitUserViewListener
+import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.common.util.CustomIntent
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.model.UserModel
@@ -18,8 +22,11 @@ import com.sample.pjh.gitusersearch.data.retrofit.ServerResponseCallback
 import com.sample.pjh.gitusersearch.data.retrofit.server.GitServer
 import com.sample.pjh.gitusersearch.data.viewmodel.GitUserSearchViewModel
 import com.sample.pjh.gitusersearch.databinding.FragmentGitusersearchBinding
+import com.sample.pjh.gitusersearch.view.activity.MainActivity
+import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
 import com.sample.pjh.gitusersearch.view.adapter.GitUserSearchAdapter
 import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
+import com.sample.pjh.gitusersearch.view.fragment.base.MyFragmentNavigator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -52,6 +59,7 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
     ////////////////////////////////////////////////
 
     override fun init() {
+        mLoadingIndicatorUtil = LoadingIndicatorUtil(requireContext())
         db = Db.getInstance(this.requireContext())!!
         mDisposable = CompositeDisposable()
         mViewModel = ViewModelProvider(this, viewModelFactory).get(GitUserSearchViewModel::class.java).apply {
@@ -139,16 +147,13 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
                 (mBinding.recyclerview.adapter as GitUserSearchAdapter).notifyItemChanged(position)
             }
             R.id.constraintLayout->{
-                var user = value as UserModel
-                mDisposable.add(GitServer.getUserInfo(user = user.login,
-                    listener = ServerResponseCallback(nextTask = {
-                        if(CustomLog.flag)CustomLog.L("onClick","ServerResponseCallback nextTask",it)
-                    },completeTask = {
+                val user = value as UserModel
+                if(CustomLog.flag)CustomLog.L("constraintLayout","user.login",user.login)
+                //CustomIntent.startIntent(requireContext() as BaseActivity, ActType.USER_INFO, "USER_LOGIN", user.login)
 
-                    },failedTask = { e, code ->
-
-                    }))
-                )
+                val action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
+                val navController = Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment)
+                navController.navigate(action)
             }
             R.id.imageview_search ->{
                 setSearch(mBinding.edittext.text.toString())
@@ -159,6 +164,18 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","onResume")
+        if(mBinding.recyclerview.adapter != null){
+            if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","mBinding.recyclerview.adapter itemCount",(mBinding.recyclerview.adapter as GitUserSearchAdapter).itemCount)
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,19 +1,18 @@
-package com.sample.pjh.gitusersearch.view.activity
+package com.sample.pjh.gitusersearch.view.fragment
 
 import android.text.TextUtils
 import androidx.lifecycle.Observer
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
-import com.sample.pjh.gitusersearch.common.type.ActType
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.viewmodel.UserInfoViewModel
-import com.sample.pjh.gitusersearch.databinding.ActivityUserinfoBinding
-import com.sample.pjh.gitusersearch.view.activity.base.BindActivity
+import com.sample.pjh.gitusersearch.databinding.FragmentUserinfoBinding
+import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
 import com.sample.pjh.gitusersearch.view.adapter.RepoListAdapter
+import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
 import io.reactivex.disposables.CompositeDisposable
 
-class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBaseListener {
-
+class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>(), OnViewModelBaseListener {
 
     // -------- LOCAL VALUE --------
     lateinit var mViewModel : UserInfoViewModel
@@ -23,12 +22,8 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
     // ABSTRACT
     ////////////////////////////////////////////////
 
-    override fun getViewType(): ActType = ActType.USER_INFO
-    override fun getBaseTag(): String = getViewType().tag
-    override fun getLayoutId(): Int = R.layout.activity_userinfo
-
-    ////////////////////////////////////////////////
-
+    override val baseTag: String = this@UserInfoFragment::class.java.simpleName
+    override val layoutId: Int = R.layout.fragment_userinfo
 
     ////////////////////////////////////////////////
     // OVERRIDE
@@ -37,14 +32,14 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
     override fun init() {
         mDisposable = CompositeDisposable()
         mViewModel = UserInfoViewModel().apply {
-            this@apply.mDisposable = this@UserInfoActivity.mDisposable
-            userLogin = intent?.extras?.getString("USER_LOGIN","") ?: ""
-            if(CustomLog.flag)CustomLog.L(getBaseTag(),"userLogin",userLogin)
-            if(TextUtils.isEmpty(userLogin)) finish()
+            this@apply.mDisposable = this@UserInfoFragment.mDisposable
+            userLogin = arguments!!.getString("user.login") ?: "JakeWharton"
+            if(CustomLog.flag) CustomLog.L("UserInfoFragment","userLogin",userLogin)
+            if(TextUtils.isEmpty(userLogin)) (requireContext() as BaseActivity).finish()
         }
         mBinding.viewModel = mViewModel
 
-        setSupportActionBar(mBinding.toolbar)
+        (requireContext() as BaseActivity).setSupportActionBar(mBinding.toolbar)
         mBinding.toolbarLayout.title = mViewModel.userLogin
 
         getUserInfo()
@@ -56,20 +51,17 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
     override fun onClick(type: Int, position: Int, value: Any?) {
 
     }
-////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////
 
 
     private fun getUserInfo(){
         mViewModel.getUserInfo()
         mViewModel.mUserInfo.observe(this, Observer {
-            if(CustomLog.flag)CustomLog.L("UserInfoActivity","observe",it)
+            if(CustomLog.flag) CustomLog.L("UserInfoActivity","observe",it)
             mBinding.includeUserinfoHeader.imageviewUserAvatar.setImageURI(it.avatar_url)
             mBinding.includeUserinfoHeader.item = it
             mBinding.includeUserinfoHeader.executePendingBindings()
-            /*mBinding.includeUserinfoHeader.textviewUserName.text = it.name
-            mBinding.includeUserinfoHeader.textviewUserPlace.text = it.company
-            mBinding.includeUserinfoHeader.textviewUserMail.text = it.email
-            mBinding.includeUserinfoHeader.textviewUserUrl.text = it.url*/
         })
     }
 
@@ -78,12 +70,11 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
         mViewModel.getUserRepoList()
         mViewModel.mUserRepos.observe(this, Observer {
             mBinding.recyclerview.adapter = RepoListAdapter().apply {
-                mContext = this@UserInfoActivity
-                listener = this@UserInfoActivity
+                mContext = requireContext()
+                listener = this@UserInfoFragment
                 setList(it)
             }
         })
     }
-
 
 }
