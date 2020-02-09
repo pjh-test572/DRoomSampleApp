@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+                name="viewModel"
+                type="com.sample.pjh.gitusersearch.data.viewmodel.GitUserSearchViewModel"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <RelativeLayout
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@color/common_white"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                    android:id="@+id/edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black_four"
+                    android:textColorHint="@color/text_2"
+                    android:hint="@string/main_edittext_hint"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:layout_marginRight="40dp"
+                    android:textSize="@dimen/text_16"
+                    android:layout_marginLeft="10dp"/>
+
+            <ImageView
+                    android:id="@+id/imageview_clear"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="46dp"
+                    android:padding="3dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="@{viewModel.gitUserSearchClear ? View.VISIBLE : View.GONE, default = gone}"
+                    android:onClick="@{(v)->viewModel.onClickVIew(v)}"
+                    android:src="@drawable/icon_keyword_delet"/>
+
+            <ImageView
+                    android:id="@+id/imageview_search"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="2dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{(v)->viewModel.onClickVIew(v)}"
+                    android:background="@drawable/drawable_btn_bacground"
+                    android:src="@drawable/top_btn_search"/>
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="@{viewModel.emptyViewVisible ? View.GONE : View.VISIBLE , default = visible}"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchView"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="@{viewModel.emptyViewVisible ? View.VISIBLE : View.GONE , default = gone}"
+                android:text="@string/noItems"
+                android:gravity="center"
+                android:textSize="@dimen/text_24"
+                android:textColor="@color/black_four"
+                android:paddingBottom="60dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
