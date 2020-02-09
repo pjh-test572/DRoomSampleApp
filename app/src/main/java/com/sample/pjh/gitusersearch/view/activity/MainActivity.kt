@@ -6,13 +6,33 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.sample.pjh.gitusersearch.R
+import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.view.activity.base.ContentActivity
 import kotlinx.android.synthetic.main.activity_scrolling.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ContentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scrolling)
+
+
+    // -------- LOCAL VALUE --------
+    // -----------------------------
+
+    ////////////////////////////////////////////////
+    // ABSTRACT
+    ////////////////////////////////////////////////
+
+    override fun getViewType(): ActType = ActType.MAIN
+    override fun getBaseTag(): String = getViewType().tag
+    override fun getLayoutId(): Int = R.layout.activity_scrolling
+
+    ////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////
+    // OVERRIDE
+    ////////////////////////////////////////////////
+
+    override fun init() {
         setSupportActionBar(toolbar)
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -20,8 +40,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_scrolling, menu)
         return true
     }
@@ -36,4 +56,7 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    ////////////////////////////////////////////////
+
 }

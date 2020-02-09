@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">GitUserSearch</string>
+
+    <!-- common -->
+    <string name="common_cancel">취소</string>
+    <string name="common_confirm">확인</string>
+    <string name="common_message_timeout">Time out....</string>
+    <string name="common_message_error_finish">오류가 발생해 앱을 종료합니다.</string>
+    <string name="common_message_error">오류가 발생하였습니다\n잠시 후 다시 시도해주세요.</string>
+
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
