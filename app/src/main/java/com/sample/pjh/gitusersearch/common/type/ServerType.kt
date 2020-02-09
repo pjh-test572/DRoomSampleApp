@@ -6,7 +6,7 @@ import com.sample.pjh.gitusersearch.BuildConfig
 // Build
 enum class BuildType {
     DEV,
-    QA,
+    NAV,
     RELEASE
 }
 

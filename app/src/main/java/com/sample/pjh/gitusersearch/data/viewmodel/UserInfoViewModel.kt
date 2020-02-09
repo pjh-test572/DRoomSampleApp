@@ -17,7 +17,6 @@ class UserInfoViewModel : BaseObservableViewModel()  {
 
     var userLogin = ""
     var mUserInfo: MutableLiveData<UserModel> = MutableLiveData()
-    var mUserRepos: MutableLiveData<ArrayList<RepoModel>> = MutableLiveData()
 
 
 
@@ -35,19 +34,6 @@ class UserInfoViewModel : BaseObservableViewModel()  {
         )
     }
 
-    fun getUserRepoList(){
-        mDisposable.add(
-            GitServer.getUserRepos(user = userLogin,
-                listener = ServerResponseCallback(nextTask = {
-                    mUserRepos.value = it
-                },completeTask = {
-
-                },failedTask = { e, code ->
-
-                })
-            )
-        )
-    }
 
 
 }

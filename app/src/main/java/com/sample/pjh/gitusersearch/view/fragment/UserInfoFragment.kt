@@ -3,16 +3,17 @@ package com.sample.pjh.gitusersearch.view.fragment
 import android.text.TextUtils
 import androidx.lifecycle.Observer
 import com.sample.pjh.gitusersearch.R
-import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.viewmodel.UserInfoViewModel
 import com.sample.pjh.gitusersearch.databinding.FragmentUserinfoBinding
 import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
-import com.sample.pjh.gitusersearch.view.adapter.RepoListAdapter
+import com.sample.pjh.gitusersearch.view.adapter.SectionsPagerAdapter
+import com.sample.pjh.gitusersearch.view.adapter.UserInfoPageAdapter
 import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.content_scrolling.view.*
 
-class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>(), OnViewModelBaseListener {
+class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() {
 
     // -------- LOCAL VALUE --------
     lateinit var mViewModel : UserInfoViewModel
@@ -43,14 +44,15 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>(), OnViewModelBas
         mBinding.toolbarLayout.title = mViewModel.userLogin
 
         getUserInfo()
-        getUserRepoList()
 
-        mBinding.executePendingBindings()
+        val sectionsPagerAdapter = UserInfoPageAdapter(requireContext(), (requireContext() as BaseActivity).supportFragmentManager).apply {
+            this@apply.userLogin = this@UserInfoFragment.mViewModel.userLogin
+        }
+        mBinding.includeUserinfoContent.view_pager.adapter = sectionsPagerAdapter
+        mBinding.includeUserinfoContent.tabs.setupWithViewPager(mBinding.includeUserinfoContent.view_pager)
+
     }
 
-    override fun onClick(type: Int, position: Int, value: Any?) {
-
-    }
 
     ////////////////////////////////////////////////
 
@@ -66,15 +68,5 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>(), OnViewModelBas
     }
 
 
-    private fun getUserRepoList(){
-        mViewModel.getUserRepoList()
-        mViewModel.mUserRepos.observe(this, Observer {
-            mBinding.recyclerview.adapter = RepoListAdapter().apply {
-                mContext = requireContext()
-                listener = this@UserInfoFragment
-                setList(it)
-            }
-        })
-    }
 
 }

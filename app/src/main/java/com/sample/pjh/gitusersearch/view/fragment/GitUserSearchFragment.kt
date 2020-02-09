@@ -1,19 +1,23 @@
 package com.sample.pjh.gitusersearch.view.fragment
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
+import com.sample.pjh.gitusersearch.BuildConfig
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.Info
 import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.common.listener.OnGitUserViewListener
 import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.common.type.BuildType
 import com.sample.pjh.gitusersearch.common.util.CustomIntent
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
@@ -149,11 +153,16 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
             R.id.constraintLayout->{
                 val user = value as UserModel
                 if(CustomLog.flag)CustomLog.L("constraintLayout","user.login",user.login)
-                //CustomIntent.startIntent(requireContext() as BaseActivity, ActType.USER_INFO, "USER_LOGIN", user.login)
-
-                val action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
-                val navController = Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment)
-                navController.navigate(action)
+                when(BuildConfig.BuildType){
+                    BuildType.NAV->{
+                        val action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
+                        val navController = Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment)
+                        navController.navigate(action)
+                    }
+                    else->{
+                        CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
+                    }
+                }
             }
             R.id.imageview_search ->{
                 setSearch(mBinding.edittext.text.toString())
@@ -164,18 +173,6 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","onResume")
-        if(mBinding.recyclerview.adapter != null){
-            if(CustomLog.flag)CustomLog.L("GitUserSearchFragment","mBinding.recyclerview.adapter itemCount",(mBinding.recyclerview.adapter as GitUserSearchAdapter).itemCount)
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()

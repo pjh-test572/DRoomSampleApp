@@ -25,6 +25,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "com.sample.pjh.gitusersearch.common.type.BuildType", "BuildType", "com.sample.pjh.gitusersearch.common.type.BuildType.DEV"
         }
+        nav {
+            applicationIdSuffix '.nav'
+            resValue "string", "app_name", "@string/app_name_nav"
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "com.sample.pjh.gitusersearch.common.type.BuildType", "BuildType", "com.sample.pjh.gitusersearch.common.type.BuildType.NAV"
+        }
         release {
             debuggable false
             minifyEnabled false

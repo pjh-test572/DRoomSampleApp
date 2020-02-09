@@ -50,12 +50,9 @@
 
         <!--<include layout="@layout/content_scrolling"/>-->
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        <include
+                android:id="@+id/include_userinfo_content"
+                layout="@layout/content_scrolling"/>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

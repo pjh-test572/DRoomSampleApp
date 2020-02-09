@@ -1,5 +1,6 @@
 package com.sample.pjh.gitusersearch.view.fragment
 
+import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -7,10 +8,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
+import com.sample.pjh.gitusersearch.BuildConfig
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.common.listener.OnGitUserViewListener
 import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.common.type.BuildType
 import com.sample.pjh.gitusersearch.common.util.CustomIntent
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
@@ -96,37 +99,34 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
             R.id.constraintLayout->{
                 var user = value as UserModel
                 if(CustomLog.flag) CustomLog.L("constraintLayout","user.login",user.login)
-                /*var action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
-                Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment).navigate(action)*/
-                var bundle = Bundle()
-                bundle.putString("user.login",user.login)
-                findNavController().navigate(R.id.action_mainFragment_to_userInfoFragment, bundle)
-                /*val navController = (requireContext() as MainActivity).findNavController(R.id.nav_host_fragment)
-                val navHostFragment = (requireContext() as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
-                val navigator = MyFragmentNavigator((requireContext() as MainActivity), navHostFragment.childFragmentManager, R.id.nav_host_fragment)
-                navigator.navigate()*/
+                when(BuildConfig.BuildType){
+                    BuildType.NAV->{
+                        /*var action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
+                        Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment).navigate(action)*/
+                        var bundle = Bundle()
+                        bundle.putString("user.login",user.login)
+                        findNavController().navigate(R.id.action_mainFragment_to_userInfoFragment, bundle)
+                        /*val navController = (requireContext() as MainActivity).findNavController(R.id.nav_host_fragment)
+                        val navHostFragment = (requireContext() as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
+                        val navigator = MyFragmentNavigator((requireContext() as MainActivity), navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+                        navigator.navigate()*/
+                    }
+                    else->{
+                        CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
+                    }
+                }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onResume")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onStart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onStop")
-    }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(CustomLog.flag)CustomLog.L("GitUserFavoriteFragment","onDestroy")
+        try{
+            Db.destroyInstance()
+        }catch (e : Exception){
+
+        }
     }
 
     companion object {

@@ -47,11 +47,6 @@ class MainActivity : ContentActivity() {
         // set navigation graph
         navController.setGraph(R.navigation.nav_graph)
     }
-
-   /* override fun onSupportNavigateUp(): Boolean {
-        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
-    }*/
-
     ////////////////////////////////////////////////
 
 }

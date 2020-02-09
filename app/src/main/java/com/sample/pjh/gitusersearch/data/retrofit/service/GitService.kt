@@ -22,4 +22,8 @@ interface GitService {
     @GET("/users/{user}/repos")
     fun getUserRepos(@Path("user") user: String): Observable<ArrayList<RepoModel>>
 
+
+    @GET("/users/{user}/starred")
+    fun getUserStars(@Path("user") user: String): Observable<ArrayList<RepoModel>>
+
 }

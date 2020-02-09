@@ -8,9 +8,12 @@ import com.sample.pjh.gitusersearch.common.type.ActType
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.viewmodel.UserInfoViewModel
 import com.sample.pjh.gitusersearch.databinding.ActivityUserinfoBinding
+import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
 import com.sample.pjh.gitusersearch.view.activity.base.BindActivity
 import com.sample.pjh.gitusersearch.view.adapter.RepoListAdapter
+import com.sample.pjh.gitusersearch.view.adapter.UserInfoPageAdapter
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.content_scrolling.view.*
 
 class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBaseListener {
 
@@ -48,9 +51,15 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
         mBinding.toolbarLayout.title = mViewModel.userLogin
 
         getUserInfo()
-        getUserRepoList()
 
-        mBinding.executePendingBindings()
+
+        val sectionsPagerAdapter = UserInfoPageAdapter(this, supportFragmentManager).apply {
+            this@apply.userLogin = this@UserInfoActivity.mViewModel.userLogin
+            if(CustomLog.flag)CustomLog.L("UserInfoActivity","sectionsPagerAdapter",this@apply.userLogin)
+        }
+        mBinding.includeUserinfoContent.view_pager.adapter = sectionsPagerAdapter
+        mBinding.includeUserinfoContent.tabs.setupWithViewPager(mBinding.includeUserinfoContent.view_pager)
+
     }
 
     override fun onClick(type: Int, position: Int, value: Any?) {
@@ -66,24 +75,9 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
             mBinding.includeUserinfoHeader.imageviewUserAvatar.setImageURI(it.avatar_url)
             mBinding.includeUserinfoHeader.item = it
             mBinding.includeUserinfoHeader.executePendingBindings()
-            /*mBinding.includeUserinfoHeader.textviewUserName.text = it.name
-            mBinding.includeUserinfoHeader.textviewUserPlace.text = it.company
-            mBinding.includeUserinfoHeader.textviewUserMail.text = it.email
-            mBinding.includeUserinfoHeader.textviewUserUrl.text = it.url*/
         })
     }
 
-
-    private fun getUserRepoList(){
-        mViewModel.getUserRepoList()
-        mViewModel.mUserRepos.observe(this, Observer {
-            mBinding.recyclerview.adapter = RepoListAdapter().apply {
-                mContext = this@UserInfoActivity
-                listener = this@UserInfoActivity
-                setList(it)
-            }
-        })
-    }
 
 
 }

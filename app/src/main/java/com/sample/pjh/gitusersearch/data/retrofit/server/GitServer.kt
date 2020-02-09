@@ -58,6 +58,22 @@ class GitServer {
                 )
 
 
+
+        fun getUserStarts(user : String, listener : ServerResponseCallback<ArrayList<RepoModel>>) : Disposable =
+            RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserRepos(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ listener.nextTask(it as ArrayList<RepoModel>) },
+                    { e ->
+                        if(e is HttpException) listener.failedTask(e, e.code())
+                        else listener.failedTask(e, -1)
+                    }, {
+                        listener.completeTask()
+                    }
+                )
+
+
+
     }
 
 }
