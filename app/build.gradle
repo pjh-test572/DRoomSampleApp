@@ -19,9 +19,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "com.sample.pjh.gitusersearch.common.type.BuildType", "BuildType", "com.sample.pjh.gitusersearch.common.type.BuildType.DEV"
+        }
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "com.sample.pjh.gitusersearch.common.type.BuildType", "BuildType", "com.sample.pjh.gitusersearch.common.type.BuildType.RELEASE"
         }
     }
 

@@ -7,7 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.type.ActType
+import com.sample.pjh.gitusersearch.data.retrofit.ServerResponseCallback
+import com.sample.pjh.gitusersearch.data.retrofit.server.GitServer
 import com.sample.pjh.gitusersearch.view.activity.base.ContentActivity
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_scrolling.*
 
 class MainActivity : ContentActivity() {
@@ -38,6 +41,16 @@ class MainActivity : ContentActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+        mDisposable = CompositeDisposable()
+        mDisposable.add(GitServer.getSearchUser("test",1,
+            ServerResponseCallback(nextTask = {
+
+            },completeTask = {
+
+            },failedTask = {e,t ->
+
+            })
+        ))
     }
 
 
