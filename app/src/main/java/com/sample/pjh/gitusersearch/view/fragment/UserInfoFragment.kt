@@ -2,21 +2,29 @@ package com.sample.pjh.gitusersearch.view.fragment
 
 import android.text.TextUtils
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.AppBarLayout
 import com.sample.pjh.gitusersearch.R
+import com.sample.pjh.gitusersearch.common.Info
+import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
+import com.sample.pjh.gitusersearch.common.type.BuildType
 import com.sample.pjh.gitusersearch.common.util.CustomLog
+import com.sample.pjh.gitusersearch.data.db.Db
+import com.sample.pjh.gitusersearch.data.viewmodel.GitInfoRepoViewModel
+import com.sample.pjh.gitusersearch.data.viewmodel.GitInfoStarViewModel
 import com.sample.pjh.gitusersearch.data.viewmodel.UserInfoViewModel
 import com.sample.pjh.gitusersearch.databinding.FragmentUserinfoBinding
 import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
-import com.sample.pjh.gitusersearch.view.adapter.SectionsPagerAdapter
-import com.sample.pjh.gitusersearch.view.adapter.UserInfoPageAdapter
+import com.sample.pjh.gitusersearch.view.adapter.RepoListAdapter
 import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.content_scrolling.view.*
 
-class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() {
+class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() , OnViewModelBaseListener {
 
     // -------- LOCAL VALUE --------
     lateinit var mViewModel : UserInfoViewModel
+    lateinit var mViewModelRepo : GitInfoRepoViewModel
+    lateinit var mViewModelStar : GitInfoStarViewModel
     // -----------------------------
 
     ////////////////////////////////////////////////
@@ -34,27 +42,107 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() {
         mDisposable = CompositeDisposable()
         mViewModel = UserInfoViewModel().apply {
             this@apply.mDisposable = this@UserInfoFragment.mDisposable
-            userLogin = arguments!!.getString("user.login") ?: "JakeWharton"
+            db = Db.getInstance(this@UserInfoFragment.requireContext())!!
+
+            userLogin = arguments!!.getString("user_login") ?: "JakeWharton"
             if(CustomLog.flag) CustomLog.L("UserInfoFragment","userLogin",userLogin)
             if(TextUtils.isEmpty(userLogin)) (requireContext() as BaseActivity).finish()
         }
-        mBinding.viewModel = mViewModel
 
-        (requireContext() as BaseActivity).setSupportActionBar(mBinding.toolbar)
-        mBinding.toolbarLayout.title = mViewModel.userLogin
+        mViewModelRepo = ViewModelProvider(this, viewModelFactory).get(GitInfoRepoViewModel::class.java).apply {
+            mDisposable = this@UserInfoFragment.mDisposable
+            userLogin = this@UserInfoFragment.mViewModel.userLogin
+        }
+
+        mViewModelStar = ViewModelProvider(this, viewModelFactory).get(GitInfoStarViewModel::class.java).apply {
+            mDisposable = this@UserInfoFragment.mDisposable
+            userLogin = this@UserInfoFragment.mViewModel.userLogin
+        }
+
+        mBinding.viewModel = mViewModel
+        mBinding.includeUserinfoContent.viewModelRepo = mViewModelRepo
+        mBinding.includeUserinfoContent.viewModelStar = mViewModelStar
+
+        when(Info.BUILD_TYPE){
+            BuildType.NAV->{
+                (requireContext() as BaseActivity).supportActionBar?.title = mViewModel.userLogin
+                mBinding.toolbarLayout.layoutParams.apply {
+                    (this as AppBarLayout.LayoutParams).scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED)
+                }
+            }
+            else ->{
+                (requireContext() as BaseActivity).setSupportActionBar(mBinding.toolbarheader)
+                mBinding.toolbarLayout.title = mViewModel.userLogin
+            }
+        }
 
         getUserInfo()
+        getUserRepoList()
+        mViewModelRepo.emptyViewVisible.set(false)
+        mViewModelStar.emptyViewVisible.set(false)
+        mBinding.toolbarLayout.title = resources.getString(R.string.info_tab1)
 
-        val sectionsPagerAdapter = UserInfoPageAdapter(requireContext(), (requireContext() as BaseActivity).supportFragmentManager).apply {
-            this@apply.userLogin = this@UserInfoFragment.mViewModel.userLogin
+        mBinding.setClickListener {
+            (mBinding.includeUserinfoContent.recyclerview.adapter as RepoListAdapter).mList.clear()
+            (mBinding.includeUserinfoContent.recyclerview.adapter as RepoListAdapter).notifyDataSetChanged()
+            when(mViewModel.userIsFavChecked.get()){
+                true->{
+                    mBinding.toolbarLayout.title = resources.getString(R.string.info_tab1)
+                    mViewModel.userIsFavChecked.set(false)
+                    getUserRepoList()
+                }
+                false -> {
+                    mBinding.toolbarLayout.title = "${resources.getString(R.string.info_tab2)} ${resources.getString(R.string.info_tab1)}"
+                    mViewModel.userIsFavChecked.set(true)
+                    getUserStarList()
+                }
+            }
         }
-        mBinding.includeUserinfoContent.view_pager.adapter = sectionsPagerAdapter
-        mBinding.includeUserinfoContent.tabs.setupWithViewPager(mBinding.includeUserinfoContent.view_pager)
 
     }
 
+    override fun onClick(type: Int, position: Int, value: Any?) {
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Db.destroyInstance()
+    }
 
     ////////////////////////////////////////////////
+
+
+    private fun getUserRepoList(){
+        mViewModelRepo.getUserRepoList()
+        mViewModelRepo.mUserRepos.observe(this, Observer {
+            if(CustomLog.flag)CustomLog.L("getUserRepoList","mUserRepos",mViewModelRepo.mUserRepos.value?.size ?: 0)
+            if(it.size == 0 )mViewModelRepo.emptyViewVisible.set(true)
+            else mViewModelRepo.emptyViewVisible.set(false)
+            mViewModelStar.emptyViewVisible.set(false)
+            mBinding.includeUserinfoContent.recyclerview.adapter = RepoListAdapter().apply {
+                mContext = requireContext()
+                listener = this@UserInfoFragment
+                setList(it)
+            }
+        })
+    }
+
+
+    private fun getUserStarList(){
+        mViewModelStar.getUserStarList()
+        mViewModelStar.mUserStar.observe(this, Observer {
+            if(CustomLog.flag) CustomLog.L("getUserStarList","mUserStar",mViewModelStar.mUserStar.value?.size ?: 0)
+            if(it.size == 0 )mViewModelStar.emptyViewVisible.set(true)
+            else mViewModelStar.emptyViewVisible.set(false)
+            mViewModelRepo.emptyViewVisible.set(false)
+            mBinding.includeUserinfoContent.recyclerview.adapter = RepoListAdapter().apply {
+                mContext = requireContext()
+                listener = this@UserInfoFragment
+                setList(it)
+            }
+        })
+    }
 
 
     private fun getUserInfo(){
@@ -66,6 +154,7 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() {
             mBinding.includeUserinfoHeader.executePendingBindings()
         })
     }
+
 
 
 

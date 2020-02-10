@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
 import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
+import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.viewmodel.GitInfoStarViewModel
 import com.sample.pjh.gitusersearch.data.viewmodel.GitUserSearchViewModel
@@ -73,6 +74,9 @@ class GitInfoStarFragment : BaseFragment<FragmentGitinfostarBinding>(), OnViewMo
     private fun getUserStarList(){
         mViewModel.getUserStarList()
         mViewModel.mUserStar.observe(this, Observer {
+            if(CustomLog.flag) CustomLog.L("getUserStarList","mUserStar",mViewModel.mUserStar.value?.size ?: 0)
+            if(it.size == 0 )mViewModel.emptyViewVisible.set(true)
+            else mViewModel.emptyViewVisible.set(false)
             mBinding.recyclerview.adapter = RepoListAdapter().apply {
                 mContext = requireContext()
                 listener = this@GitInfoStarFragment

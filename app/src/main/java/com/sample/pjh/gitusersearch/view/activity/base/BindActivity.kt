@@ -34,7 +34,7 @@ abstract class BindActivity<B : ViewDataBinding> : BaseActivity() {
         try {
             mBinding = DataBindingUtil.setContentView(this, getLayoutId())
             if(!::viewModelFactory.isInitialized) viewModelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-            init()
+            init(saveInstanceState)
         } catch (e: Exception) {
             showErrorDialog(e, true)
         }

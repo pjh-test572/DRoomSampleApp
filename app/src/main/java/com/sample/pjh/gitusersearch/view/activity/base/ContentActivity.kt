@@ -28,7 +28,7 @@ abstract class ContentActivity : BaseActivity() {
         try {
             setContentView(getLayoutId())
 
-            init()
+            init(saveInstanceState)
         } catch (e: Exception) {
             showErrorDialog(e, true)
         }

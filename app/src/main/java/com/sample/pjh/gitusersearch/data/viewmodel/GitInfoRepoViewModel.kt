@@ -25,6 +25,14 @@ class GitInfoRepoViewModel : BaseObservableViewModel()  {
     var userLogin = ""
 
 
+    var emptyViewVisible = ObservableBoolean(true) // ObservableInt(View.GONE)
+        @Bindable
+        get() = field
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.emptyViewVisible)
+        }
+
     fun getUserRepoList(){
         mDisposable.add(
             GitServer.getUserRepos(user = userLogin,

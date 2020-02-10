@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
@@ -14,7 +16,7 @@ import com.sample.pjh.gitusersearch.view.fragment.GitUserSearchFragment
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), ViewPager.OnPageChangeListener{
+class MainPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), ViewPager.OnPageChangeListener{
     lateinit var gitUserFavFrag : GitUserFavoriteFragment
     lateinit var gitUserSearchFrag : GitUserSearchFragment
     lateinit var mLoadingIndicatorUtil : LoadingIndicatorUtil
@@ -22,11 +24,11 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     override fun getItem(position: Int): Fragment = when(position){
         0 -> GitUserSearchFragment.newInstance().apply {
             gitUserSearchFrag = this
-            this@apply.mLoadingIndicatorUtil =  this@SectionsPagerAdapter.mLoadingIndicatorUtil
+            this@apply.mLoadingIndicatorUtil =  this@MainPagerAdapter.mLoadingIndicatorUtil
         }
         else -> GitUserFavoriteFragment.newInstance().apply {
             gitUserFavFrag = this
-            this@apply.mLoadingIndicatorUtil =  this@SectionsPagerAdapter.mLoadingIndicatorUtil
+            this@apply.mLoadingIndicatorUtil =  this@MainPagerAdapter.mLoadingIndicatorUtil
         }
     }
 
@@ -38,6 +40,13 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     override fun getCount(): Int {
         return 2
     }
+
+
+    override fun getItemPosition(`object`: Any): Int {
+        //return super.getItemPosition(`object`)
+        return PagerAdapter.POSITION_NONE
+    }
+
 
     override fun onPageScrollStateChanged(state: Int) {  }
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {  }

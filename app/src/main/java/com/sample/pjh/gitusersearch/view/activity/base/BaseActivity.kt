@@ -159,7 +159,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract fun getViewType(): ActType
 
-    protected abstract fun init()
+    protected abstract fun init(saveInstanceState: Bundle?)
 
 
     ////////////////////////////////////////////////

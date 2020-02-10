@@ -1,6 +1,5 @@
 package com.sample.pjh.gitusersearch.view.fragment
 
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -22,15 +21,11 @@ import com.sample.pjh.gitusersearch.common.util.CustomIntent
 import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.model.UserModel
-import com.sample.pjh.gitusersearch.data.retrofit.ServerResponseCallback
-import com.sample.pjh.gitusersearch.data.retrofit.server.GitServer
 import com.sample.pjh.gitusersearch.data.viewmodel.GitUserSearchViewModel
 import com.sample.pjh.gitusersearch.databinding.FragmentGitusersearchBinding
 import com.sample.pjh.gitusersearch.view.activity.MainActivity
-import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
 import com.sample.pjh.gitusersearch.view.adapter.GitUserSearchAdapter
 import com.sample.pjh.gitusersearch.view.fragment.base.BaseFragment
-import com.sample.pjh.gitusersearch.view.fragment.base.MyFragmentNavigator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -152,14 +147,15 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
             }
             R.id.constraintLayout->{
                 val user = value as UserModel
-                if(CustomLog.flag)CustomLog.L("constraintLayout","user.login",user.login)
-                when(BuildConfig.BuildType){
+                if(CustomLog.flag)CustomLog.L("constraintLayout","user_login",user.login)
+                when(Info.BUILD_TYPE){
                     BuildType.NAV->{
-                        val action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
-                        val navController = Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment)
-                        navController.navigate(action)
+                        if(CustomLog.flag)CustomLog.L("constraintLayout","NAV user.login",user.login)
+                        val action = GitUserSearchFragmentDirections.actionGitUserSearchFragmentToUserInfoFragment2(user.login)
+                        findNavController().navigate(action)
                     }
                     else->{
+                        if(CustomLog.flag)CustomLog.L("constraintLayout","else user.login",user.login)
                         CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
                     }
                 }
@@ -183,8 +179,8 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
         }
     }
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
 
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
     override fun onPageSelected(position: Int) {
         if(mBinding.recyclerview.adapter != null){
             (mBinding.recyclerview.adapter as GitUserSearchAdapter).notifyDataSetChanged()
@@ -214,4 +210,6 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
             return GitUserSearchFragment()
         }
     }
+
+
 }

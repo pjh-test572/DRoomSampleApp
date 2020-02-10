@@ -1,11 +1,13 @@
 package com.sample.pjh.gitusersearch.view.activity
 
+import android.os.Bundle
 import android.text.TextUtils
 import androidx.lifecycle.Observer
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
 import com.sample.pjh.gitusersearch.common.type.ActType
 import com.sample.pjh.gitusersearch.common.util.CustomLog
+import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.viewmodel.UserInfoViewModel
 import com.sample.pjh.gitusersearch.databinding.ActivityUserinfoBinding
 import com.sample.pjh.gitusersearch.view.activity.base.BaseActivity
@@ -37,17 +39,18 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
     // OVERRIDE
     ////////////////////////////////////////////////
 
-    override fun init() {
+    override fun init(saveInstanceState: Bundle?) {
         mDisposable = CompositeDisposable()
         mViewModel = UserInfoViewModel().apply {
             this@apply.mDisposable = this@UserInfoActivity.mDisposable
             userLogin = intent?.extras?.getString("USER_LOGIN","") ?: ""
             if(CustomLog.flag)CustomLog.L(getBaseTag(),"userLogin",userLogin)
             if(TextUtils.isEmpty(userLogin)) finish()
+            db = Db.getInstance(context = baseContext)!!
         }
         mBinding.viewModel = mViewModel
 
-        setSupportActionBar(mBinding.toolbar)
+        setSupportActionBar(mBinding.toolbarheader)
         mBinding.toolbarLayout.title = mViewModel.userLogin
 
         getUserInfo()
@@ -62,10 +65,16 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Db.destroyInstance()
+    }
+
     override fun onClick(type: Int, position: Int, value: Any?) {
 
     }
-////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////
 
 
     private fun getUserInfo(){
@@ -74,6 +83,7 @@ class UserInfoActivity : BindActivity<ActivityUserinfoBinding>(), OnViewModelBas
             if(CustomLog.flag)CustomLog.L("UserInfoActivity","observe",it)
             mBinding.includeUserinfoHeader.imageviewUserAvatar.setImageURI(it.avatar_url)
             mBinding.includeUserinfoHeader.item = it
+            mViewModel.getFavUserCheck(it.id)
             mBinding.includeUserinfoHeader.executePendingBindings()
         })
     }

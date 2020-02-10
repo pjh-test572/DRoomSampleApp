@@ -44,7 +44,7 @@ class GitUserFavoriteRepository{
             for(value in allList) list.add(value.getUser())
         }
         list
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         .subscribe({
             listener.nextTask(it)
         },

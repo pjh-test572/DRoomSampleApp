@@ -25,6 +25,14 @@ class GitInfoStarViewModel : BaseObservableViewModel()  {
     var userLogin = ""
     var mUserStar: MutableLiveData<ArrayList<RepoModel>> = MutableLiveData()
 
+    var emptyViewVisible = ObservableBoolean(true) // ObservableInt(View.GONE)
+        @Bindable
+        get() = field
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.emptyViewVisible)
+        }
+
     fun getUserStarList(){
         mDisposable.add(
             GitServer.getUserStarts(user = userLogin,

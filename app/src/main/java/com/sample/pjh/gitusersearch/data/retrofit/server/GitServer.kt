@@ -16,34 +16,43 @@ class GitServer {
 
     companion object{
 
+        /**
+         * 유저 검색
+         */
         fun getSearchUser(q : String, page : Int, listener : ServerResponseCallback<SearchUserModel>) : Disposable =
             RetrofitManager.createService(ServerType.GIT, GitService::class.java).getSearchUser(q,page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ listener.nextTask(it as SearchUserModel) },
-                { e ->
-                    if(e is HttpException) listener.failedTask(e, e.code())
-                    else listener.failedTask(e, -1)
-                }, {
-                    listener.completeTask()
-                }
-            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ listener.nextTask(it as SearchUserModel) },
+                    { e ->
+                        if(e is HttpException) listener.failedTask(e, e.code())
+                        else listener.failedTask(e, -1)
+                    }, {
+                        listener.completeTask()
+                    }
+                )
 
 
+        /**
+         * 유저 정보
+         */
         fun getUserInfo(user : String, listener : ServerResponseCallback<UserModel>) : Disposable =
             RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserInfo(user)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ listener.nextTask(it as UserModel) },
-                { e ->
-                    if(e is HttpException) listener.failedTask(e, e.code())
-                    else listener.failedTask(e, -1)
-                }, {
-                    listener.completeTask()
-                }
-            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ listener.nextTask(it as UserModel) },
+                    { e ->
+                        if(e is HttpException) listener.failedTask(e, e.code())
+                        else listener.failedTask(e, -1)
+                    }, {
+                        listener.completeTask()
+                    }
+                )
 
 
+        /**
+         * 유저 Repo
+         */
         fun getUserRepos(user : String, listener : ServerResponseCallback<ArrayList<RepoModel>>) : Disposable =
             RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserRepos(user)
                 .subscribeOn(Schedulers.io())
@@ -58,9 +67,11 @@ class GitServer {
                 )
 
 
-
+        /**
+         * 유저 Star
+         */
         fun getUserStarts(user : String, listener : ServerResponseCallback<ArrayList<RepoModel>>) : Disposable =
-            RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserRepos(user)
+            RetrofitManager.createService(ServerType.GIT, GitService::class.java).getUserStars(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ listener.nextTask(it as ArrayList<RepoModel>) },
