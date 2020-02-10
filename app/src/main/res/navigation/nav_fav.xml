@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/favlist" app:startDestination="@id/gitUserFavoriteFragment">
+
+    <fragment android:id="@+id/gitUserFavoriteFragment"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.GitUserFavoriteFragment"
+              android:label="Git User Fav"
+              tools:layout="@layout/fragment_gituserfavorite">
+        <action android:id="@+id/action_gitUserFavoriteFragment_to_userInfoFragment3"
+                app:destination="@id/userInfoFragment3"/>
+    </fragment>
+    <fragment android:id="@+id/userInfoFragment3"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.UserInfoFragment"
+              android:label="UserInfoFragment"
+              tools:layout="@layout/fragment_userinfo">
+        <argument android:name="user_login" app:argType="string" app:nullable="true"/>
+    </fragment>
+</navigation>

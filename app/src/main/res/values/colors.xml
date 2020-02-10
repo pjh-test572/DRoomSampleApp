@@ -3,4 +3,99 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="black_overlay">#66000000</color>
+    <color name="white_overlay">#D4ffffff</color>
+    <color name="white_overlay2">#B3ffffff</color>
+    <color name="white_overlay3">#5Affffff</color>
+    <color name="toast_background">#c4000000</color>
+
+    <!-- COMMON -->
+    <color name="common_white">#ffffff</color>
+    <color name="common_black">#000000</color>
+    <color name="common_blue_purple">#5d2ed1</color>
+
+    <!-- BACKGROUND -->
+    <color name="background_default">@color/common_white</color>
+    <color name="background_dim">#80000000</color>
+    <color name="background_1">#e8e8e8</color>
+    <color name="background_2">#444444</color>
+
+    <!-- LINE -->
+    <color name="line_1">#e6e6e6</color>
+    <color name="line_2">@color/white_four</color>
+    <color name="line_3">#ebedef</color>
+    <color name="line_4">#d9dde0</color>
+    <color name="line_5">#111111</color>
+    <color name="line_6">#dddddd</color>
+
+    <!-- TEXT -->
+    <color name="text_1">#333333</color>
+    <color name="text_2">#666666</color>
+    <color name="text_3">#111111</color>
+    <color name="text_4">#d9dde0</color>
+    <color name="text_5">#777777</color>
+    <color name="text_6">@color/greyish_brown_two</color>
+    <color name="text_7">@color/greyish</color>
+    <color name="text_8">@color/blue_purple</color>
+    <color name="text_9">#afafaf</color>
+
+    <!-- COLOR -->
+    <color name="blue_purple">#5d2ed1</color>
+    <color name="blue_purple_overlay">#cc5d2ed1</color>
+    <color name="pinkish_grey">#cccccc</color>
+    <color name="silver">#b7bec4</color>
+    <color name="light_grey">#f2f4f4</color>
+    <color name="pale_grey">#f9f9fa</color>
+    <color name="cool_grey">#9a9fa8</color>
+
+    <color name="warm_grey">#898989</color>
+    <color name="warm_grey_two">#777777</color>
+    <color name="warm_grey_three">#a0a0a0</color>
+    <color name="warm_grey_four">#707070</color>
+    <color name="warm_grey_five">#9a9a9a</color>
+    <color name="warm_grey_six">#999999</color>
+
+    <color name="black_two">#333333</color>
+    <color name="black_three">#212121</color>
+    <color name="black_four">#111111</color>
+
+    <color name="greyish">#aaaaaa</color>
+    <color name="greyish_brown">#555555</color>
+    <color name="greyish_brown_two">#444444</color>
+
+    <color name="white_two">#ededed</color>
+    <color name="white_three">#dddddd</color>
+    <color name="white_four">#eeeeee</color>
+    <color name="white_five">#fafafa</color>
+    <color name="white_six">#eaeaea</color>
+    <color name="white_seven">#ebebeb</color>
+
+    <color name="pale_lilac">#ede2ff</color>
+    <color name="perrywinkle">#aa91e6</color>
+    <color name="blurple">#6a3ed4</color>
+    <color name="brick">#ce2525</color>
+    <color name="tomato">#d42d1e</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="disable_border">#ebebeb</color>
+    <color name="color_dbdbdb">#dbdbdb</color>
+    <color name="color_fbfbfb">#fbfbfb</color>
+    <color name="cloudy_blue">#b7bec4</color>
+    <color name="watermelon">#ff4568</color>
+    <color name="dark_tan">#b58c44</color>
+
+
+
+    <color name="white_translucent">#AAFFFFFF</color>
+    <color name="black_translucent">#B0000000</color>
+
+    <color name="border">@color/white_translucent</color>
+    <color name="guideline">@color/white_translucent</color>
+    <color name="corner">@android:color/white</color>
+    <color name="surrounding_area">@color/black_translucent</color>
+
+
 </resources>

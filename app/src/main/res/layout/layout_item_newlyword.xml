@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="item"
+                type="com.sample.pjh.gitusersearch.data.db.entity.NewlyWordEntity"/>
+    </data>
+
+    <LinearLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:background="@drawable/drawable_btn_bacground"
+            android:layout_margin="3dp">
+
+        <TextView
+                style="@style/TextRegular"
+                android:id="@+id/textview_newly_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="12dp"
+                android:textSize="@dimen/text_16"
+                android:text="@{item.searchWord}"/>
+
+        <TextView
+                style="@style/TextRegular"
+                android:id="@+id/textview_newly_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@{@string/score_text(item.totalCount)}"
+                android:textSize="@dimen/text_16"/>
+
+    </LinearLayout>
+</layout>

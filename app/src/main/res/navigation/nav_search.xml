@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/search"
+            app:startDestination="@id/gitUserSearchFragment">
+    <fragment android:id="@+id/gitUserSearchFragment"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.GitUserSearchFragment"
+              android:label="Git User Search"
+              tools:layout="@layout/fragment_gitusersearch">
+        <action android:id="@+id/action_gitUserSearchFragment_to_userInfoFragment2"
+                app:destination="@id/userInfoFragment2"/>
+    </fragment>
+    <fragment android:id="@+id/userInfoFragment2"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.UserInfoFragment"
+              android:label="UserInfoFragment"
+              tools:layout="@layout/fragment_userinfo">
+        <argument android:name="user_login" app:argType="string" app:nullable="true"/>
+    </fragment>
+</navigation>
