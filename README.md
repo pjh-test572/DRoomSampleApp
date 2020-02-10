@@ -12,4 +12,18 @@ Build Type 으로 구분함
    - 상세화면에는 유저 정보와 기본 Repositories 리스트로 구성됨
    - 상세화면에서 좌측 동그란 버튼을 누르면 Stars Repositories 리스트로 변경
 
+language 
+   - Kotlin
 
+사용 라이브러리
+   - Room
+   - ReactiveX
+   - Fresco
+   - Navigation Component
+   - Retrofit
+   - Gson
+   
+      
+Navigation Component 참고 자료
+   - https://github.com/android/architecture-components-samples/tree/master/NavigationAdvancedSample
+   
