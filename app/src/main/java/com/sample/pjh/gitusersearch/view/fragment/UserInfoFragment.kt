@@ -8,7 +8,6 @@ import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.Info
 import com.sample.pjh.gitusersearch.common.listener.OnViewModelBaseListener
 import com.sample.pjh.gitusersearch.common.type.BuildType
-import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.viewmodel.GitInfoRepoViewModel
 import com.sample.pjh.gitusersearch.data.viewmodel.GitInfoStarViewModel
@@ -44,8 +43,7 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() , OnViewModelBa
             this@apply.mDisposable = this@UserInfoFragment.mDisposable
             db = Db.getInstance(this@UserInfoFragment.requireContext())!!
 
-            userLogin = arguments!!.getString("user_login") ?: "JakeWharton"
-            if(CustomLog.flag) CustomLog.L("UserInfoFragment","userLogin",userLogin)
+            userLogin = arguments!!.getString("user_login") ?: ""
             if(TextUtils.isEmpty(userLogin)) (requireContext() as BaseActivity).finish()
         }
 
@@ -116,7 +114,6 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() , OnViewModelBa
     private fun getUserRepoList(){
         mViewModelRepo.getUserRepoList()
         mViewModelRepo.mUserRepos.observe(this, Observer {
-            if(CustomLog.flag)CustomLog.L("getUserRepoList","mUserRepos",mViewModelRepo.mUserRepos.value?.size ?: 0)
             if(it.size == 0 )mViewModelRepo.emptyViewVisible.set(true)
             else mViewModelRepo.emptyViewVisible.set(false)
             mViewModelStar.emptyViewVisible.set(false)
@@ -132,7 +129,6 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() , OnViewModelBa
     private fun getUserStarList(){
         mViewModelStar.getUserStarList()
         mViewModelStar.mUserStar.observe(this, Observer {
-            if(CustomLog.flag) CustomLog.L("getUserStarList","mUserStar",mViewModelStar.mUserStar.value?.size ?: 0)
             if(it.size == 0 )mViewModelStar.emptyViewVisible.set(true)
             else mViewModelStar.emptyViewVisible.set(false)
             mViewModelRepo.emptyViewVisible.set(false)
@@ -148,7 +144,6 @@ class UserInfoFragment : BaseFragment<FragmentUserinfoBinding>() , OnViewModelBa
     private fun getUserInfo(){
         mViewModel.getUserInfo()
         mViewModel.mUserInfo.observe(this, Observer {
-            if(CustomLog.flag) CustomLog.L("UserInfoActivity","observe",it)
             mBinding.includeUserinfoHeader.imageviewUserAvatar.setImageURI(it.avatar_url)
             mBinding.includeUserinfoHeader.item = it
             mBinding.includeUserinfoHeader.executePendingBindings()

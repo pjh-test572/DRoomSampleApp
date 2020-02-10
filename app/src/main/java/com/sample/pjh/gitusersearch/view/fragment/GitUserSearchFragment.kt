@@ -147,17 +147,12 @@ class GitUserSearchFragment : BaseFragment<FragmentGitusersearchBinding>() , OnG
             }
             R.id.constraintLayout->{
                 val user = value as UserModel
-                if(CustomLog.flag)CustomLog.L("constraintLayout","user_login",user.login)
                 when(Info.BUILD_TYPE){
                     BuildType.NAV->{
-                        if(CustomLog.flag)CustomLog.L("constraintLayout","NAV user.login",user.login)
                         val action = GitUserSearchFragmentDirections.actionGitUserSearchFragmentToUserInfoFragment2(user.login)
                         findNavController().navigate(action)
                     }
-                    else->{
-                        if(CustomLog.flag)CustomLog.L("constraintLayout","else user.login",user.login)
-                        CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
-                    }
+                    else-> CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
                 }
             }
             R.id.imageview_search ->{

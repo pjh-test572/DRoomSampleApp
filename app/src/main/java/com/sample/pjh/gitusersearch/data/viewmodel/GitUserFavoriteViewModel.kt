@@ -32,10 +32,7 @@ class GitUserFavoriteViewModel : BaseObservableViewModel()  {
 }
 
 
-
-
 class GitUserFavoriteRepository{
-
 
     fun getFavUser(db : Db, listener : ServerResponseCallback<ArrayList<UserModel>>) : Disposable = Observable.fromCallable<ArrayList<UserModel>> {
         var allList = db.gitUserDao().getAll()

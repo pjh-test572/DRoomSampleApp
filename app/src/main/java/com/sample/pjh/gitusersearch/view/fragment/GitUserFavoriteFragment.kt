@@ -1,12 +1,10 @@
 package com.sample.pjh.gitusersearch.view.fragment
 
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager.widget.ViewPager
-import com.sample.pjh.gitusersearch.BuildConfig
 import com.sample.pjh.gitusersearch.R
 import com.sample.pjh.gitusersearch.common.Info
 import com.sample.pjh.gitusersearch.common.dialog.LoadingIndicatorUtil
@@ -14,7 +12,6 @@ import com.sample.pjh.gitusersearch.common.listener.OnGitUserViewListener
 import com.sample.pjh.gitusersearch.common.type.ActType
 import com.sample.pjh.gitusersearch.common.type.BuildType
 import com.sample.pjh.gitusersearch.common.util.CustomIntent
-import com.sample.pjh.gitusersearch.common.util.CustomLog
 import com.sample.pjh.gitusersearch.data.db.Db
 import com.sample.pjh.gitusersearch.data.model.UserModel
 import com.sample.pjh.gitusersearch.data.viewmodel.GitUserFavoriteViewModel
@@ -52,7 +49,6 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
     override fun onPageSelected(position: Int) {
-        if(CustomLog.flag)CustomLog.L("onPageSelected","position",position)
         if(mBinding.recyclerview.adapter != null){
             (mBinding.recyclerview.adapter as GitUserSearchAdapter).mList.clear()
             (mBinding.recyclerview.adapter as GitUserSearchAdapter).notifyDataSetChanged()
@@ -97,21 +93,12 @@ class GitUserFavoriteFragment : BaseFragment<FragmentGituserfavoriteBinding>(), 
             }
             R.id.constraintLayout->{
                 var user = value as UserModel
-                if(CustomLog.flag) CustomLog.L("constraintLayout","user.login",user.login)
                 when(Info.BUILD_TYPE){
                     BuildType.NAV->{
-                        /*var action = MainFragmentDirections.actionMainFragmentToUserInfoFragment(user.login)
-                        Navigation.findNavController(requireContext() as MainActivity, R.id.nav_host_fragment).navigate(action)*/
                         var bundle = bundleOf("user_login" to user.login)
                         findNavController().navigate(R.id.action_gitUserFavoriteFragment_to_userInfoFragment3, bundle)
-                        /*val navController = (requireContext() as MainActivity).findNavController(R.id.nav_host_fragment)
-                        val navHostFragment = (requireContext() as MainActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
-                        val navigator = MyFragmentNavigator((requireContext() as MainActivity), navHostFragment.childFragmentManager, R.id.nav_host_fragment)
-                        navigator.navigate()*/
                     }
-                    else->{
-                        CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
-                    }
+                    else-> CustomIntent.startIntent(requireActivity(), ActType.USER_INFO, "USER_LOGIN",user.login)
                 }
             }
         }

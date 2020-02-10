@@ -64,6 +64,18 @@ class MainActivity : ContentActivity() {
     }
 
 
+    ////////////////////////////////////////////////
+
+
+
+
+    ////////////////////////////////////////////////
+    /**
+     * https://github.com/android/architecture-components-samples
+     * NavigationAdvancedSample
+     */
+    ////////////////////////////////////////////////
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         // Now that BottomNavigationBar has restored its instance state
@@ -76,8 +88,8 @@ class MainActivity : ContentActivity() {
                 setupBottomNavigationBar()
             }
         }
-
     }
+
 
     /**
      * Called on first creation and when restoring state.

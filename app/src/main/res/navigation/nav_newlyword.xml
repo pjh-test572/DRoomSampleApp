@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/NewlyWord"
+            app:startDestination="@id/mainFragment2">
+
+    <fragment android:id="@+id/mainFragment2"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.MainFragment"
+              android:label="NewlyWord"
+              tools:layout="@layout/fragment_main">
+        <action android:id="@+id/action_mainFragment2_to_userInfoFragment4" app:destination="@id/userInfoFragment4"/>
+    </fragment>
+    <fragment android:id="@+id/userInfoFragment4"
+              android:name="com.sample.pjh.gitusersearch.view.fragment.UserInfoFragment"
+              android:label="UserInfoFragment"
+              tools:layout="@layout/fragment_userinfo">
+        <argument android:name="user_login" app:argType="string" app:nullable="true"/>
+    </fragment>
+</navigation>
